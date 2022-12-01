@@ -1,0 +1,17 @@
+src/types
+subgraph.yaml
+# graph-node docker data folder
+data
+matchstick.yaml
+tests/.bin
+node_modules
+.vscode
+build/
+dist
+/**/sha.ts
+/**/sha.h
+*.tgz
+.env
+.DS_Store
+*.tsbuildinfo
+*.log

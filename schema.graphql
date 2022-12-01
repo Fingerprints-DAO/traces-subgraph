@@ -1,0 +1,46 @@
+type Collection @entity {
+  id: String!
+  ogTokenAddress: String!
+  blockTimestamp: BigInt!
+  image: String
+  tokens: [WNFT!]! @derivedFrom(field: "collection")
+}
+
+type TokenAdded @entity(immutable: true) {
+  id: Bytes!
+  ogTokenAddress: Bytes!
+  ogTokenId: BigInt! # uint256
+  tokenId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type WNFT @entity {
+  id: String!
+  collection: Collection!
+  ogTokenAddress: String!
+  ogTokenId: BigInt!
+  tokenId: BigInt!
+  image: String
+}
+
+type TokenDeleted @entity(immutable: true) {
+  id: Bytes!
+  ogTokenAddress: Bytes!
+  ogTokenId: BigInt! # uint256
+  tokenId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type Transfer @entity(immutable: true) {
+  id: Bytes!
+  from: Bytes! # address
+  to: Bytes! # address
+  tokenId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}

@@ -1,0 +1,33 @@
+{
+  "name": "traces-subgraph",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "graph-node": "docker-compose up",
+    "clean": "rimraf ./src/types ./build subgraph.yaml",
+    "prepare:hardhat": "mustache config/hardhat.json subgraph.yaml.mustache > subgraph.yaml",
+    "prepare:rinkeby": "mustache config/rinkeby.json subgraph.yaml.mustache > subgraph.yaml",
+    "prepare:mainnet": "mustache config/mainnet.json subgraph.yaml.mustache > subgraph.yaml",
+    "prepare:goerli": "mustache config/goerli.json subgraph.yaml.mustache > subgraph.yaml",
+    "codegen": "graph codegen --output-dir src/types/",
+    "build": "graph build",
+    "test": "graph test",
+    "create:localnode": "graph create --node http://localhost:8020/",
+    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ traces",
+    "deploy:localnode": "graph deploy --debug --node http://localhost:8020/ --ipfs http://localhost:5001/",
+    "deploy:hardhat": "yarn clean && yarn prepare:hardhat && yarn codegen && yarn create:localnode traces && yarn deploy:localnode traces",
+    "deploy:rinkeby": "yarn clean && yarn prepare:rinkeby && yarn codegen && yarn deploy traces-rinkeby",
+    "deploy:mainnet": "yarn clean && yarn prepare:mainnet && yarn codegen && yarn deploy traces",
+    "deploy:goerli": "yarn clean && yarn prepare:goerli && yarn codegen && yarn deploy verbsteam/traces-goerli",
+    "mustache": "mustache"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "^0.36.1",
+    "@graphprotocol/graph-ts": "^0.29.0"
+  },
+  "devDependencies": {
+    "matchstick-as": "0.5.0",
+    "mustache": "^4.2.0"
+  }
+}

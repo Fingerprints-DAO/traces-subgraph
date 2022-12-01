@@ -1,0 +1,34 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Traces
+    network: {{network}}
+    source:
+      address: "{{traces.address}}"
+      abi: Traces
+      startBlock: {{traces.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Collection
+        - WNFT
+        - TokenAdded
+        - TokenDeleted
+        - Transfer
+      abis:
+        - name: Traces
+          file: ./abis/Traces.json
+      eventHandlers:
+        - event: CollectionAdded(indexed uint256,indexed address)
+          handler: handleCollectionAdded
+        - event: TokenAdded(indexed address,indexed uint256,indexed uint256,uint256,uint256)
+          handler: handleTokenAdded
+        - event: TokenDeleted(indexed address,indexed uint256,indexed uint256)
+          handler: handleTokenDeleted
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/traces.ts
