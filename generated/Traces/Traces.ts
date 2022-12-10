@@ -84,6 +84,44 @@ export class CollectionAdded__Params {
   }
 }
 
+export class Outbid extends ethereum.Event {
+  get params(): Outbid__Params {
+    return new Outbid__Params(this);
+  }
+}
+
+export class Outbid__Params {
+  _event: Outbid;
+
+  constructor(event: Outbid) {
+    this._event = event;
+  }
+
+  get ogTokenAddress(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get ogTokenId(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
+  }
+
+  get tokenId(): BigInt {
+    return this._event.parameters[2].value.toBigInt();
+  }
+
+  get amount(): BigInt {
+    return this._event.parameters[3].value.toBigInt();
+  }
+
+  get price(): BigInt {
+    return this._event.parameters[4].value.toBigInt();
+  }
+
+  get owner(): Address {
+    return this._event.parameters[5].value.toAddress();
+  }
+}
+
 export class Paused extends ethereum.Event {
   get params(): Paused__Params {
     return new Paused__Params(this);

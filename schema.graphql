@@ -2,7 +2,6 @@ type Collection @entity {
   id: String!
   ogTokenAddress: String!
   blockTimestamp: BigInt!
-  image: String
   tokens: [WNFT!]! @derivedFrom(field: "collection")
 }
 
@@ -22,7 +21,21 @@ type WNFT @entity {
   ogTokenAddress: String!
   ogTokenId: BigInt!
   tokenId: BigInt!
-  image: String
+  currentOwner: Bytes! # address
+  price: BigInt! # uint256
+}
+
+type Outbid @entity(immutable: true) {
+  id: Bytes!
+  ogTokenAddress: Bytes! # address
+  ogTokenId: BigInt! # uint256
+  tokenId: BigInt! # uint256
+  amount: BigInt! # uint256
+  price: BigInt! # uint256
+  owner: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
 }
 
 type TokenDeleted @entity(immutable: true) {
@@ -35,11 +48,10 @@ type TokenDeleted @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type Transfer @entity(immutable: true) {
+type CollectionAdded @entity(immutable: true) {
   id: Bytes!
-  from: Bytes! # address
-  to: Bytes! # address
-  tokenId: BigInt! # uint256
+  collectionId: BigInt! # uint256
+  ogTokenAddress: Bytes! # address
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
