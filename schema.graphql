@@ -22,7 +22,10 @@ type WNFT @entity {
   ogTokenId: BigInt!
   tokenId: BigInt!
   currentOwner: Bytes! # address
-  price: BigInt! # uint256
+  lastPrice: BigInt! # uint256
+  firstStakePrice: BigInt! # uint256
+  minHoldPeriod: BigInt! # uint256
+  blockTimestamp: BigInt!
 }
 
 type Outbid @entity(immutable: true) {

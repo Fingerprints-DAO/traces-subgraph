@@ -41,12 +41,15 @@ export function handleTokenAdded(event: TokenAddedEvent): void {
   wnft.ogTokenAddress = event.params.ogTokenAddress.toHexString()
   wnft.ogTokenId = event.params.ogTokenId
   wnft.tokenId = event.params.tokenId
-  wnft.price = event.params.param3
+  wnft.lastPrice = event.params.param3
+  wnft.firstStakePrice = event.params.param3
+  wnft.minHoldPeriod = event.params.param4
+  wnft.blockTimestamp = event.block.timestamp
 
   let tracesContract = TracesContract.bind(event.address)
   const collection = tracesContract.collection(event.params.ogTokenAddress)
   wnft.collection = collection.getId().toString()
-  wnft.currentOwner = tracesContract.vaultAddress()
+  wnft.currentOwner = tracesContract._address
 
   wnft.save()
 }
@@ -93,7 +96,7 @@ export function handleOutbid(event: OutbidEvent): void {
   if (wnft === null) wnft = new WNFT(event.params.tokenId.toString())
 
   wnft.currentOwner = event.params.owner
-  wnft.price = event.params.amount
+  wnft.lastPrice = event.params.amount
 
   wnft.save()
 }
