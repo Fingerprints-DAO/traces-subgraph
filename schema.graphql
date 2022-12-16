@@ -12,6 +12,8 @@ type TokenAdded @entity(immutable: true) {
   tokenId: BigInt! # uint256
   blockNumber: BigInt!
   blockTimestamp: BigInt!
+  price: BigInt! # uint256
+  minHoldPeriod: BigInt! # uint256
   transactionHash: Bytes!
 }
 

@@ -27,6 +27,8 @@ export function handleTokenAdded(event: TokenAddedEvent): void {
   entity.ogTokenId = event.params.ogTokenId
   entity.tokenId = event.params.tokenId
 
+  entity.price = event.params.price
+  entity.minHoldPeriod = event.params.minHoldPeriod
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
   entity.transactionHash = event.transaction.hash
@@ -41,9 +43,9 @@ export function handleTokenAdded(event: TokenAddedEvent): void {
   wnft.ogTokenAddress = event.params.ogTokenAddress.toHexString()
   wnft.ogTokenId = event.params.ogTokenId
   wnft.tokenId = event.params.tokenId
-  wnft.lastPrice = event.params.param3
-  wnft.firstStakePrice = event.params.param3
-  wnft.minHoldPeriod = event.params.param4
+  wnft.lastPrice = event.params.price
+  wnft.firstStakePrice = event.params.price
+  wnft.minHoldPeriod = event.params.minHoldPeriod
   wnft.blockTimestamp = event.block.timestamp
 
   let tracesContract = TracesContract.bind(event.address)

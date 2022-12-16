@@ -243,11 +243,11 @@ export class TokenAdded__Params {
     return this._event.parameters[2].value.toBigInt();
   }
 
-  get param3(): BigInt {
+  get price(): BigInt {
     return this._event.parameters[3].value.toBigInt();
   }
 
-  get param4(): BigInt {
+  get minHoldPeriod(): BigInt {
     return this._event.parameters[4].value.toBigInt();
   }
 }
