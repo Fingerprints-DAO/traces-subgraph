@@ -4,10 +4,13 @@ import {
   TokenAdded as TokenAddedEvent,
   TokenDeleted as TokenDeletedEvent,
   Traces as TracesContract,
+  RoleGranted as RoleGrantedEvent,
+  RoleRevoked as RoleRevokedEvent,
+  Transfer as TransferEvent,
 } from '../generated/Traces/Traces'
-import { TokenAdded, TokenDeleted, Outbid } from '../generated/schema'
+import { TokenAdded, TokenDeleted, Outbid, Transfer } from '../generated/schema'
 
-import { Collection, WNFT } from './types/schema'
+import { Collection, WNFT, Admin, Editor } from './types/schema'
 
 export function handleCollectionAdded(event: CollectionAddedEvent): void {
   let collection = Collection.load(event.params.collectionId.toString())
@@ -101,4 +104,70 @@ export function handleOutbid(event: OutbidEvent): void {
   wnft.lastPrice = event.params.amount
 
   wnft.save()
+}
+
+export function handleRoleGranted(event: RoleGrantedEvent): void {
+  let tracesContract = TracesContract.bind(event.address)
+  // must have 2 equal instead 3
+  if (event.params.role == tracesContract.DEFAULT_ADMIN_ROLE()) {
+    let user = Admin.load(event.params.account)
+    if (user === null) user = new Admin(event.params.account)
+
+    user.sender = event.params.sender
+    user.role = event.params.role
+    user.blockTimestamp = event.block.timestamp
+    user.transactionHash = event.transaction.hash
+
+    user.save()
+  }
+
+  // must have 2 equal instead 3
+  if (event.params.role == tracesContract.EDITOR_ROLE()) {
+    let user = Editor.load(event.params.account)
+    if (user === null) user = new Editor(event.params.account)
+
+    user.sender = event.params.sender
+    user.role = event.params.role
+    user.blockTimestamp = event.block.timestamp
+    user.transactionHash = event.transaction.hash
+
+    user.save()
+  }
+}
+
+export function handleRoleRevoked(event: RoleRevokedEvent): void {
+  let tracesContract = TracesContract.bind(event.address)
+  if (event.params.role === tracesContract.DEFAULT_ADMIN_ROLE()) {
+    let user = Admin.load(event.params.account)
+
+    if (user !== null) {
+      user.unset(user.id.toString())
+    }
+  } else {
+    let user = Editor.load(event.params.account)
+
+    if (user !== null) {
+      user.unset(user.id.toString())
+    }
+  }
+}
+
+export function handleTransfer(event: TransferEvent): void {
+  let entity = new Transfer(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
+  entity.from = event.params.from
+  entity.to = event.params.to
+  entity.tokenId = event.params.tokenId
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+
+  entity.save()
+
+  let wnft = WNFT.load(event.params.tokenId.toString())
+  if (wnft !== null) {
+    wnft.currentOwner = event.params.to
+    wnft.save()
+  }
 }

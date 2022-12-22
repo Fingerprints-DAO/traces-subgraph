@@ -61,3 +61,29 @@ type CollectionAdded @entity(immutable: true) {
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
+
+type Editor @entity {
+  id: Bytes! # address
+  sender: Bytes! # address
+  role: Bytes! # bytes32
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type Admin @entity {
+  id: Bytes! # address
+  sender: Bytes! # address
+  role: Bytes! # bytes32
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type Transfer @entity(immutable: true) {
+  id: Bytes!
+  from: Bytes! # address
+  to: Bytes! # address
+  tokenId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}

@@ -18,6 +18,7 @@ dataSources:
         - WNFT
         - TokenAdded
         - TokenDeleted
+        - Transfer
       abis:
         - name: Traces
           file: ./abis/Traces.json
@@ -30,4 +31,10 @@ dataSources:
           handler: handleTokenDeleted
         - event: Outbid(address,uint256,indexed uint256,uint256,uint256,indexed address)
           handler: handleOutbid
+        - event: RoleGranted(indexed bytes32,indexed address,indexed address)
+          handler: handleRoleGranted
+        - event: RoleRevoked(indexed bytes32,indexed address,indexed address)
+          handler: handleRoleRevoked
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
       file: ./src/traces.ts
