@@ -1,3 +1,4 @@
+import { store } from '@graphprotocol/graph-ts'
 import {
   CollectionAdded as CollectionAddedEvent,
   Outbid as OutbidEvent,
@@ -76,7 +77,7 @@ export function handleTokenDeleted(event: TokenDeletedEvent): void {
   let wnft = WNFT.load(event.params.tokenId.toString())
   // if wnft is not null, delete it
   if (wnft !== null) {
-    wnft.unset(wnft.id)
+    store.remove('WNFT', event.params.tokenId.toString())
   }
 }
 
@@ -141,13 +142,13 @@ export function handleRoleRevoked(event: RoleRevokedEvent): void {
     let user = Admin.load(event.params.account)
 
     if (user !== null) {
-      user.unset(user.id.toString())
+      store.remove('Admin', event.params.account.toString())
     }
   } else {
     let user = Editor.load(event.params.account)
 
     if (user !== null) {
-      user.unset(user.id.toString())
+      store.remove('Editor', event.params.account.toString())
     }
   }
 }
