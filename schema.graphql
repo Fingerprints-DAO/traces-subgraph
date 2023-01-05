@@ -3,6 +3,8 @@ type Collection @entity {
   ogTokenAddress: String!
   blockTimestamp: BigInt!
   tokens: [WNFT!]! @derivedFrom(field: "collection")
+  tokensCount: BigInt!
+  lastAddedTokenTimestamp: BigInt!
 }
 
 type TokenAdded @entity(immutable: true) {

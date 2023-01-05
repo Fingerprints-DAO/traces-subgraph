@@ -1,4 +1,4 @@
-import { store } from '@graphprotocol/graph-ts'
+import { BigInt, store } from '@graphprotocol/graph-ts'
 import {
   CollectionAdded as CollectionAddedEvent,
   Outbid as OutbidEvent,
@@ -20,6 +20,8 @@ export function handleCollectionAdded(event: CollectionAddedEvent): void {
   }
   collection.ogTokenAddress = event.params.ogTokenAddress.toHexString()
   collection.blockTimestamp = event.block.timestamp
+  collection.tokensCount = BigInt.fromString('0')
+  collection.lastAddedTokenTimestamp = event.block.timestamp
   collection.save()
 }
 
@@ -53,11 +55,22 @@ export function handleTokenAdded(event: TokenAddedEvent): void {
   wnft.blockTimestamp = event.block.timestamp
 
   let tracesContract = TracesContract.bind(event.address)
-  const collection = tracesContract.collection(event.params.ogTokenAddress)
-  wnft.collection = collection.getId().toString()
+  const collectionOnContract = tracesContract.collection(
+    event.params.ogTokenAddress
+  )
+  wnft.collection = collectionOnContract.getId().toString()
   wnft.currentOwner = tracesContract._address
 
   wnft.save()
+
+  let collection = Collection.load(collectionOnContract.getId().toString())
+  if (collection === null) {
+    collection = new Collection(event.params.tokenId.toString())
+  }
+  collection.tokensCount = collection.tokensCount.plus(BigInt.fromString('1'))
+  collection.lastAddedTokenTimestamp = wnft.blockTimestamp
+
+  collection.save()
 }
 
 export function handleTokenDeleted(event: TokenDeletedEvent): void {
@@ -77,6 +90,18 @@ export function handleTokenDeleted(event: TokenDeletedEvent): void {
   let wnft = WNFT.load(event.params.tokenId.toString())
   // if wnft is not null, delete it
   if (wnft !== null) {
+    let tracesContract = TracesContract.bind(event.address)
+    const collectionOnContract = tracesContract.collection(
+      event.params.ogTokenAddress
+    )
+    let collection = Collection.load(collectionOnContract.getId().toString())
+    if (collection !== null) {
+      collection.tokensCount = collection.tokensCount.minus(
+        BigInt.fromString('1')
+      )
+
+      collection.save()
+    }
     store.remove('WNFT', event.params.tokenId.toString())
   }
 }
