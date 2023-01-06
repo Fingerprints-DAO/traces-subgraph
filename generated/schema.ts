@@ -68,6 +68,24 @@ export class Collection extends Entity {
   set tokens(value: Array<string>) {
     this.set("tokens", Value.fromStringArray(value));
   }
+
+  get tokensCount(): BigInt {
+    let value = this.get("tokensCount");
+    return value!.toBigInt();
+  }
+
+  set tokensCount(value: BigInt) {
+    this.set("tokensCount", Value.fromBigInt(value));
+  }
+
+  get lastAddedTokenTimestamp(): BigInt {
+    let value = this.get("lastAddedTokenTimestamp");
+    return value!.toBigInt();
+  }
+
+  set lastAddedTokenTimestamp(value: BigInt) {
+    this.set("lastAddedTokenTimestamp", Value.fromBigInt(value));
+  }
 }
 
 export class TokenAdded extends Entity {
