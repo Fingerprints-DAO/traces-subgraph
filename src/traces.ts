@@ -163,17 +163,19 @@ export function handleRoleGranted(event: RoleGrantedEvent): void {
 
 export function handleRoleRevoked(event: RoleRevokedEvent): void {
   let tracesContract = TracesContract.bind(event.address)
-  if (event.params.role === tracesContract.DEFAULT_ADMIN_ROLE()) {
+
+  // must have 2 equal instead 3
+  if (event.params.role == tracesContract.DEFAULT_ADMIN_ROLE()) {
     let user = Admin.load(event.params.account)
 
     if (user !== null) {
-      store.remove('Admin', event.params.account.toString())
+      store.remove('Admin', event.params.account.toHexString())
     }
   } else {
     let user = Editor.load(event.params.account)
 
     if (user !== null) {
-      store.remove('Editor', event.params.account.toString())
+      store.remove('Editor', event.params.account.toHexString())
     }
   }
 }
