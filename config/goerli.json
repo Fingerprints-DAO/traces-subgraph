@@ -1,7 +1,7 @@
 {
   "network": "goerli",
   "traces": {
-    "address": "0x7f259F387eBB4D522CA6cbc194af5ef6EBbdC906",
-    "startBlock": 8268084
+    "address": "0x993AC70D16e29Aa4fB9A23FCCdCDe6E94EB30eda",
+    "startBlock": 8318559
   }
 }

@@ -3,32 +3,6 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_adminAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_vaultAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "contract IERC20",
-        "name": "_tokenAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "string",
-        "name": "_url",
-        "type": "string"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
         "name": "ogTokenAddress",
         "type": "address"
       },
@@ -225,6 +199,19 @@
       }
     ],
     "name": "CollectionAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint8",
+        "name": "version",
+        "type": "uint8"
+      }
+    ],
+    "name": "Initialized",
     "type": "event"
   },
   {
@@ -511,6 +498,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "PRECISION",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -620,7 +620,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "tokenCount",
+        "name": "totalMinted",
         "type": "uint256"
       }
     ],
@@ -645,7 +645,7 @@
     "name": "customTokenAddress",
     "outputs": [
       {
-        "internalType": "contract IERC20",
+        "internalType": "contract IERC20Upgradeable",
         "name": "",
         "type": "address"
       }
@@ -918,6 +918,34 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_adminAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_vaultAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "contract IERC20Upgradeable",
+        "name": "_tokenAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "_url",
+        "type": "string"
+      }
+    ],
+    "name": "initialize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -1198,7 +1226,7 @@
   {
     "inputs": [
       {
-        "internalType": "contract IERC20",
+        "internalType": "contract IERC20Upgradeable",
         "name": "_customTokenAddress",
         "type": "address"
       },

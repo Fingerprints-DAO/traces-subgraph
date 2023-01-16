@@ -84,6 +84,24 @@ export class CollectionAdded__Params {
   }
 }
 
+export class Initialized extends ethereum.Event {
+  get params(): Initialized__Params {
+    return new Initialized__Params(this);
+  }
+}
+
+export class Initialized__Params {
+  _event: Initialized;
+
+  constructor(event: Initialized) {
+    this._event = event;
+  }
+
+  get version(): i32 {
+    return this._event.parameters[0].value.toI32();
+  }
+}
+
 export class Outbid extends ethereum.Event {
   get params(): Outbid__Params {
     return new Outbid__Params(this);
@@ -349,7 +367,7 @@ export class Traces__collectionResult {
     return this.value1;
   }
 
-  getTokenCount(): BigInt {
+  getTotalMinted(): BigInt {
     return this.value2;
   }
 }
@@ -592,6 +610,21 @@ export class Traces extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBytes());
+  }
+
+  PRECISION(): BigInt {
+    let result = super.call("PRECISION", "PRECISION():(uint256)", []);
+
+    return result[0].toBigInt();
+  }
+
+  try_PRECISION(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("PRECISION", "PRECISION():(uint256)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
   balanceOf(owner: Address): BigInt {
@@ -1289,48 +1322,6 @@ export class Traces extends ethereum.SmartContract {
   }
 }
 
-export class ConstructorCall extends ethereum.Call {
-  get inputs(): ConstructorCall__Inputs {
-    return new ConstructorCall__Inputs(this);
-  }
-
-  get outputs(): ConstructorCall__Outputs {
-    return new ConstructorCall__Outputs(this);
-  }
-}
-
-export class ConstructorCall__Inputs {
-  _call: ConstructorCall;
-
-  constructor(call: ConstructorCall) {
-    this._call = call;
-  }
-
-  get _adminAddress(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
-  get _vaultAddress(): Address {
-    return this._call.inputValues[1].value.toAddress();
-  }
-
-  get _tokenAddress(): Address {
-    return this._call.inputValues[2].value.toAddress();
-  }
-
-  get _url(): string {
-    return this._call.inputValues[3].value.toString();
-  }
-}
-
-export class ConstructorCall__Outputs {
-  _call: ConstructorCall;
-
-  constructor(call: ConstructorCall) {
-    this._call = call;
-  }
-}
-
 export class AddTokenCall extends ethereum.Call {
   get inputs(): AddTokenCall__Inputs {
     return new AddTokenCall__Inputs(this);
@@ -1475,6 +1466,48 @@ export class GrantRoleCall__Outputs {
   _call: GrantRoleCall;
 
   constructor(call: GrantRoleCall) {
+    this._call = call;
+  }
+}
+
+export class InitializeCall extends ethereum.Call {
+  get inputs(): InitializeCall__Inputs {
+    return new InitializeCall__Inputs(this);
+  }
+
+  get outputs(): InitializeCall__Outputs {
+    return new InitializeCall__Outputs(this);
+  }
+}
+
+export class InitializeCall__Inputs {
+  _call: InitializeCall;
+
+  constructor(call: InitializeCall) {
+    this._call = call;
+  }
+
+  get _adminAddress(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get _vaultAddress(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+
+  get _tokenAddress(): Address {
+    return this._call.inputValues[2].value.toAddress();
+  }
+
+  get _url(): string {
+    return this._call.inputValues[3].value.toString();
+  }
+}
+
+export class InitializeCall__Outputs {
+  _call: InitializeCall;
+
+  constructor(call: InitializeCall) {
     this._call = call;
   }
 }
