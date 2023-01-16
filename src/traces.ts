@@ -15,7 +15,7 @@ import { Collection, WNFT, Admin, Editor } from './types/schema'
 
 export function handleCollectionAdded(event: CollectionAddedEvent): void {
   let collection = Collection.load(event.params.collectionId.toString())
-  if (collection === null) {
+  if (collection == null) {
     collection = new Collection(event.params.collectionId.toString())
   }
   collection.ogTokenAddress = event.params.ogTokenAddress.toHexString()
@@ -42,7 +42,7 @@ export function handleTokenAdded(event: TokenAddedEvent): void {
   entity.save()
 
   let wnft = WNFT.load(event.params.tokenId.toString())
-  if (wnft === null) {
+  if (wnft == null) {
     wnft = new WNFT(event.params.tokenId.toString())
   }
 
@@ -64,7 +64,7 @@ export function handleTokenAdded(event: TokenAddedEvent): void {
   wnft.save()
 
   let collection = Collection.load(collectionOnContract.getId().toString())
-  if (collection === null) {
+  if (collection == null) {
     collection = new Collection(event.params.tokenId.toString())
   }
   collection.tokensCount = collection.tokensCount.plus(BigInt.fromString('1'))
@@ -89,13 +89,13 @@ export function handleTokenDeleted(event: TokenDeletedEvent): void {
 
   let wnft = WNFT.load(event.params.tokenId.toString())
   // if wnft is not null, delete it
-  if (wnft !== null) {
+  if (wnft != null) {
     let tracesContract = TracesContract.bind(event.address)
     const collectionOnContract = tracesContract.collection(
       event.params.ogTokenAddress
     )
     let collection = Collection.load(collectionOnContract.getId().toString())
-    if (collection !== null) {
+    if (collection != null) {
       collection.tokensCount = collection.tokensCount.minus(
         BigInt.fromString('1')
       )
@@ -124,10 +124,10 @@ export function handleOutbid(event: OutbidEvent): void {
   entity.save()
 
   let wnft = WNFT.load(event.params.tokenId.toString())
-  if (wnft === null) wnft = new WNFT(event.params.tokenId.toString())
+  if (wnft == null) wnft = new WNFT(event.params.tokenId.toString())
 
   wnft.currentOwner = event.params.owner
-  wnft.lastPrice = event.params.amount
+  wnft.lastPrice = event.params.price // amount sent to outbid
 
   wnft.save()
 }
@@ -137,7 +137,7 @@ export function handleRoleGranted(event: RoleGrantedEvent): void {
   // must have 2 equal instead 3
   if (event.params.role == tracesContract.DEFAULT_ADMIN_ROLE()) {
     let user = Admin.load(event.params.account)
-    if (user === null) user = new Admin(event.params.account)
+    if (user == null) user = new Admin(event.params.account)
 
     user.sender = event.params.sender
     user.role = event.params.role
@@ -150,7 +150,7 @@ export function handleRoleGranted(event: RoleGrantedEvent): void {
   // must have 2 equal instead 3
   if (event.params.role == tracesContract.EDITOR_ROLE()) {
     let user = Editor.load(event.params.account)
-    if (user === null) user = new Editor(event.params.account)
+    if (user == null) user = new Editor(event.params.account)
 
     user.sender = event.params.sender
     user.role = event.params.role
@@ -168,13 +168,13 @@ export function handleRoleRevoked(event: RoleRevokedEvent): void {
   if (event.params.role == tracesContract.DEFAULT_ADMIN_ROLE()) {
     let user = Admin.load(event.params.account)
 
-    if (user !== null) {
+    if (user != null) {
       store.remove('Admin', event.params.account.toHexString())
     }
   } else {
     let user = Editor.load(event.params.account)
 
-    if (user !== null) {
+    if (user != null) {
       store.remove('Editor', event.params.account.toHexString())
     }
   }
@@ -194,7 +194,7 @@ export function handleTransfer(event: TransferEvent): void {
   entity.save()
 
   let wnft = WNFT.load(event.params.tokenId.toString())
-  if (wnft !== null) {
+  if (wnft != null) {
     wnft.currentOwner = event.params.to
     wnft.save()
   }
